@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#111d34" />
+    <meta name="description" content="Voxtext — распознавание речи и разделение реплик по спикерам." />
+    <title>Voxtext — аудио в текст</title>
+    <link rel="stylesheet" href="/styles.css" />
+    <script src="/app.js" defer></script>
+  </head>
+  <body>
+    <div class="page">
+      <header class="topbar">
+        <div class="container topbar-inner">
+          <a class="brand" href="/" aria-label="Voxtext — главная">
+            <span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></span>
+            <span>voxtext<span class="brand-dot">.</span></span>
+          </a>
+          <div class="topbar-right">
+            <span class="topbar-caption">СТУДИЯ РАСПОЗНАВАНИЯ</span>
+            <button class="text-button" id="logoutButton" type="button" hidden>Выйти</button>
+          </div>
+        </div>
+      </header>
+
+      <main>
+        <div class="container">
+          <div id="globalMessage" class="notice" role="status" aria-live="polite" hidden></div>
+        </div>
+
+        <section class="container auth-layout" id="authView" aria-label="Вход в Voxtext">
+          <div class="intro-panel">
+            <div class="eyebrow light"><span class="pulse"></span> АУДИО → ТЕКСТ</div>
+            <h1>Слова становятся <em>видимыми.</em></h1>
+            <p class="intro-copy">Загрузите запись, получите текст и увидьте, кто говорит в каждой реплике.</p>
+            <div class="intro-features">
+              <div><span class="feature-index">01</span><span>Загрузка аудио</span></div>
+              <div><span class="feature-index">02</span><span>Разделение по спикерам</span></div>
+              <div><span class="feature-index">03</span><span>Готовый текст для работы</span></div>
+            </div>
+            <div class="sound-illustration" aria-hidden="true">
+              <span style="--h:24%"></span><span style="--h:48%"></span><span style="--h:32%"></span><span style="--h:72%"></span><span style="--h:46%"></span><span style="--h:88%"></span><span style="--h:58%"></span><span style="--h:100%"></span><span style="--h:62%"></span><span style="--h:84%"></span><span style="--h:43%"></span><span style="--h:70%"></span><span style="--h:34%"></span><span style="--h:58%"></span><span style="--h:26%"></span>
+            </div>
+          </div>
+
+          <div class="auth-card card">
+            <div class="auth-heading">
+              <div class="eyebrow">НАЧНИТЕ ЗДЕСЬ</div>
+              <h2>Ваша рабочая студия</h2>
+              <p>Войдите или создайте аккаунт, чтобы обработать запись.</p>
+            </div>
+            <div class="auth-tabs" role="tablist" aria-label="Способ входа">
+              <button type="button" id="loginTab" class="auth-tab active" role="tab" aria-selected="true" aria-controls="loginForm">Вход</button>
+              <button type="button" id="registerTab" class="auth-tab" role="tab" aria-selected="false" aria-controls="registerForm">Регистрация</button>
+            </div>
+
+            <form id="loginForm" class="form" novalidate>
+              <label for="loginEmail">Электронная почта</label>
+              <input id="loginEmail" name="email" type="email" autocomplete="email" placeholder="name@example.com" required />
+              <label for="loginPassword">Пароль</label>
+              <input id="loginPassword" name="password" type="password" autocomplete="current-password" placeholder="Введите пароль" required />
+              <button class="button button-primary form-submit" type="submit">Войти в студию <span aria-hidden="true">↗</span></button>
+            </form>
+
+            <form id="registerForm" class="form" novalidate hidden>
+              <div class="form-row">
+                <div><label for="registerName">Имя</label><input id="registerName" name="username" autocomplete="given-name" placeholder="Ваше имя" required /></div>
+                <div><label for="registerSurname">Фамилия</label><input id="registerSurname" name="usersurname" autocomplete="family-name" placeholder="Фамилия" required /></div>
+              </div>
+              <label for="registerEmail">Электронная почта</label>
+              <input id="registerEmail" name="email" type="email" autocomplete="email" placeholder="name@example.com" required />
+              <label for="registerPassword">Пароль <span class="label-hint">от 4 символов</span></label>
+              <input id="registerPassword" name="password" type="password" autocomplete="new-password" minlength="4" placeholder="Придумайте пароль" required />
+              <button class="button button-primary form-submit" type="submit">Создать аккаунт <span aria-hidden="true">↗</span></button>
+            </form>
+            <p id="authError" class="form-error" role="alert" hidden></p>
+            <p class="auth-note">Ваши файлы обрабатываются локальным сервером Voxtext.</p>
+          </div>
+        </section>
+
+        <section class="container studio" id="studioView" aria-label="Студия транскрибации" hidden>
+          <div class="studio-heading">
+            <div>
+              <div class="eyebrow"><span class="pulse"></span> РАБОЧЕЕ ПРОСТРАНСТВО</div>
+              <h1>Превратите запись<br /><em>в понятный текст.</em></h1>
+              <p>Загрузите аудиофайл — мы распознаем речь и разделим реплики по спикерам.</p>
+            </div>
+            <div class="profile-chip"><span class="avatar" id="userInitial">В</span><span><small>Вы вошли как</small><strong id="userName">Пользователь</strong></span></div>
+          </div>
+
+          <div class="workspace">
+            <section class="card upload-card" aria-labelledby="uploadTitle">
+              <div class="section-topline"><span class="section-index">01 / ЗАГРУЗКА</span><span class="section-status">Аудио → реплики</span></div>
+              <h2 id="uploadTitle">Ваш аудиофайл</h2>
+              <p class="section-copy">Выберите файл или перетащите его сюда. Поддерживаемый формат зависит от FFmpeg на сервере.</p>
+
+              <div class="drop-zone" id="dropZone" role="button" tabindex="0" aria-label="Выбрать аудиофайл">
+                <span class="upload-icon" aria-hidden="true">↑</span>
+                <strong>Перетащите аудио сюда</strong>
+                <span>или нажмите, чтобы выбрать файл</span>
+                <small>MP3, WAV, M4A, OGG и другие форматы</small>
+              </div>
+              <input id="audioFile" type="file" accept="audio/*,.m4a,.ogg,.flac,.webm" hidden />
+
+              <div id="fileDetails" class="file-details" hidden>
+                <div class="file-icon" aria-hidden="true">♫</div>
+                <div class="file-meta"><strong id="fileName"></strong><small id="fileSize"></small></div>
+                <button id="clearFileButton" class="icon-button" type="button" aria-label="Убрать файл">×</button>
+              </div>
+              <audio id="audioPreview" class="audio-preview" controls preload="metadata" hidden></audio>
+
+              <div class="upload-actions">
+                <button id="transcribeButton" class="button button-primary" type="button" disabled>Распознать аудио <span aria-hidden="true">↗</span></button>
+                <button id="cancelButton" class="button button-subtle" type="button" hidden>Отменить</button>
+              </div>
+              <div id="processingStatus" class="processing" role="status" aria-live="polite" hidden><span class="spinner" aria-hidden="true"></span><span>Распознаём запись. Это может занять несколько минут…</span></div>
+            </section>
+
+            <section class="card result-card" aria-labelledby="resultTitle">
+              <div class="section-topline"><span class="section-index">02 / РЕЗУЛЬТАТ</span><span class="section-status" id="resultCount">Пока пусто</span></div>
+              <div class="result-heading"><div><h2 id="resultTitle">Транскрипт</h2><p class="section-copy">Реплики с отметками времени и спикерами.</p></div></div>
+              <div id="emptyResults" class="empty-results"><span class="empty-mark" aria-hidden="true">〰</span><strong>Здесь появится текст</strong><p>Сначала загрузите и обработайте аудиофайл.</p></div>
+              <div id="utteranceList" class="utterance-list" aria-live="polite" hidden></div>
+              <div class="result-actions"><button id="copyButton" class="button button-outline" type="button" disabled>Скопировать текст</button><button id="downloadButton" class="button button-outline" type="button" disabled>Скачать .txt</button></div>
+            </section>
+          </div>
+        </section>
+      </main>
+
+      <footer class="footer container"><span>voxtext<span class="brand-dot">.</span></span><span>Слушать проще, когда видно смысл.</span></footer>
+    </div>
+  </body>
+</html>
